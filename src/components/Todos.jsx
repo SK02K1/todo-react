@@ -37,10 +37,33 @@ export const Todos = () => {
         setTodos([...todos, data]);
       }
     } catch (err) {
-      console.error(err);
+      setError(err.message);
     } finally {
       setIsLoading(false);
       setNewTask("");
+    }
+  };
+
+  const changeHandler = async ({ id, isCompleted }) => {
+    setIsLoading(true);
+    try {
+      const { data, status } = await axios.put(
+        `https://621baa0b768a4e102099c1cb.mockapi.io/todos/${id}`,
+        {
+          isCompleted: !isCompleted
+        }
+      );
+      if (status === 200) {
+        setTodos((prevTodos) =>
+          prevTodos.map((todoInfo) => {
+            return todoInfo.id === id ? data : todoInfo;
+          })
+        );
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -59,7 +82,11 @@ export const Todos = () => {
       {error && <p>{error}</p>}
       <ClipLoader loading={isLoading} size={20} speedMultiplier={1.5} />
       {todos.map((todoInfo) => (
-        <TodoCard key={todoInfo.id} todoInfo={todoInfo} />
+        <TodoCard
+          key={todoInfo.id}
+          todoInfo={todoInfo}
+          changeHandler={changeHandler}
+        />
       ))}
     </main>
   );
