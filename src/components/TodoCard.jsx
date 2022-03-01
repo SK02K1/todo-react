@@ -1,4 +1,4 @@
-export const TodoCard = ({ todoInfo, changeHandler }) => {
+export const TodoCard = ({ todoInfo, changeHandler, handleDelete }) => {
   const { id, task, isCompleted } = todoInfo;
   return (
     <div>
@@ -13,6 +13,7 @@ export const TodoCard = ({ todoInfo, changeHandler }) => {
           {task}
         </span>
       </label>
+      <button onClick={() => handleDelete(id)}>delete</button>
     </div>
   );
 };

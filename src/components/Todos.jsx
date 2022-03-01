@@ -67,6 +67,24 @@ export const Todos = () => {
     }
   };
 
+  const deleteBtnHandler = async (id) => {
+    setIsLoading(true);
+    try {
+      const { status } = await axios.delete(
+        `https://621baa0b768a4e102099c1cb.mockapi.io/todos/${id}`
+      );
+      if (status === 200) {
+        setTodos((prevTodos) =>
+          prevTodos.filter((todoInfo) => todoInfo.id !== id)
+        );
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <main>
       <form onSubmit={submitHandler}>
@@ -86,6 +104,7 @@ export const Todos = () => {
           key={todoInfo.id}
           todoInfo={todoInfo}
           changeHandler={changeHandler}
+          handleDelete={deleteBtnHandler}
         />
       ))}
     </main>
